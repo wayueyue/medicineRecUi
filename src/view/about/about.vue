@@ -17,47 +17,55 @@
       </div>
       <div class="add">
         <a>症状名</a>
-        <select v-model="form.symptom"
-          ><option>1</option
-          ><option>2</option></select
-        >
-        <span><el-button type="primary" @click="submitform('form')" :loading="loading">添加症状</el-button></span>
-        <span><el-button @click="resetform('form')">清空列表 </el-button></span>
-        <span><el-button>自动开方</el-button></span>
+        <select v-model="aaa">
+          <option v-for="ss in sym" :value="ss.symptom" v-bind:key="ss">
+            {{ ss.symptom }}
+          </option>
+        </select>
+        <span><el-button @click="getSymptoms()">添加症状</el-button></span>
+        <span><el-button @click="emptyList()">清空列表 </el-button></span>
+        <span><el-button type="primary" @click="submitform()" :loading="loading">自动开方</el-button></span>
       </div>
       <div class="list">
         <span
           ><a>症状列表：</a>
-          <div class="e-list">
-            <a>xxxxx</a>
-          </div></span
-        >
+          <input class="e-list" type="text" v-model="form.symptom" />
+        </span>
       </div>
     </el-form>
     <div>
-      <span
-        ><a>开放报告：</a>
-        <div class="r-list">
+      <span>
+        <a>开放报告：</a>
+        <div class="r-list" v-for="item in group" v-bind:key="item">
           <div class="baogao"><a>病人开方报告</a></div>
           <div class="info">
-            <a>姓名：xxx</a>
-            <a>年龄：xx</a>
-            <a>性别：x</a>
+            <a>姓名：{{ item.name }}</a>
+            <a>年龄：{{ item.age }}</a>
+            <a>性别：{{ item.sex }}</a>
           </div>
           <div class="state">
-            <a>病人症状：</a>
+            <a>病人症状：{{ item.symptom }}</a>
           </div>
           <div class="result">
             <a>处方推荐结果：</a>
           </div>
           <div class="res">
-            <a>xxxxx</a>
+            <a>{{ item.prescription }}</a>
           </div>
         </div>
       </span>
     </div>
   </div>
 </template>
+
+<!--{-->
+<!--"id": 43,-->
+<!--"name": "bsj",-->
+<!--"age": 20,-->
+<!--"sex": "man",-->
+<!--"symptom": "头痛,发热,汗出",-->
+<!--"prescription": "推荐的草药为：[['斑蟊|猫', '普通二分至三分。'], ['龙胆', '普通五分至钱半。'], ['铁精', '普通内服一厘至五厘，煎服者虽数钱亦可，近时多用以融化他药中服之。'], ['白头翁', '普通钱半至三钱。'], ['栀子', '普通一钱至三钱。'], ['白垩', '普通数分至一钱。'], ['云母', ' 一般内服数分起。'], ['天名精', '普通一二钱。'], ['龙骨', '普通二钱至三四钱。'], ['白瓜子', None], ['葶苈', '普通八分至二三钱。'], ['瓜蒂', '普通一钱至二钱。'], ['石灰', '普通三分至一钱。'], ['五加皮', '普通一钱至三钱。'], ['阳起石', '普通水飞用，五分至一钱。'], ['槐实', '普通一钱至三钱。']]"-->
+<!--}-->
 
 <script>
 import patient from '@/model/patient'
@@ -71,29 +79,43 @@ export default {
         sex: '',
         symptom: '',
       },
-      loading: false,
+      sym: [],
+      aaa: '',
+      group: [
+        {
+          prescription: '',
+        },
+      ],
     }
   },
   methods: {
-    async submitform(formName) {
+    async getSymptoms() {
       try {
         this.loading = true
-        const res = await patient.createPatient(this.form)
+        this.sym = await patient.getSymptoms()
+        this.form.symptom = `${this.form.symptom + this.aaa }    `
         this.loading = false
-        if (res.code < window.MAX_SUCCESS_CODE) {
-          this.$message.success(`${res.message}`)
-          this.resetForm(formName)
-        }
-      } catch (error) {
+      } catch (e) {
         this.loading = false
-        this.$message.error('症状添加失败，请检测填写信息')
-        console.log(error)
+        console.log(e)
       }
     },
-    // 重置表单
-    resetform(formName) {
-      this.$refs[formName].resetFields()
+    async submitform() {
+      try {
+        this.loading = true
+        this.group = await patient.createPatient(this.form)
+        this.loading = false
+      } catch (e) {
+        this.loading = false
+        console.log(e)
+      }
     },
+    async emptyList() {
+      this.form.symptom = ''
+    },
+  },
+  async created() {
+    this.getSymptoms()
   },
 }
 </script>
@@ -156,11 +178,15 @@ a {
   width: 60%;
   height: 60px;
   word-wrap: break-word;
+  text-align: center;
   a {
     font-size: 25px;
     margin-left: 20px;
     margin-right: 50px;
   }
+}
+size {
+  width: 120px;
 }
 .r-list {
   margin-left: 220px;

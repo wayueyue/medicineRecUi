@@ -83,8 +83,8 @@ export default {
       tableColumn: [], // 表头数据
       operate: [], // 表格按键操作区
       dialogFormVisible: false, // 控制弹窗显示
-      selectGroup: '', // 选中的分组Id
-      groups: [], // 所有分组
+      selectGroup: '', // 选中的分组
+      groups: [], // 所有分组Id
       group_id: undefined,
       activeTab: '修改信息',
       form: {
