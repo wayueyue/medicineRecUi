@@ -88,7 +88,7 @@ export default {
       try {
         this.loading = true
         this.sym = await patient.getSymptoms()
-        this.form.symptom = `${this.form.symptom + this.aaa}    `
+        this.form.symptom = `${this.form.symptom + this.aaa }  `
         this.loading = false
       } catch (e) {
         this.loading = false
