@@ -23,7 +23,7 @@
           </option>
         </select>
         <span><el-button @click="getSymptoms()">添加症状</el-button></span>
-        <span><el-button @click="emptyList()">清空列表 </el-button></span>
+        <span><el-button @click="emptyList()">清空列表</el-button></span>
         <span><el-button type="primary" @click="submitform()" :loading="loading">自动开方</el-button></span>
       </div>
       <div class="list">
@@ -58,15 +58,6 @@
   </div>
 </template>
 
-<!--{-->
-<!--"id": 43,-->
-<!--"name": "bsj",-->
-<!--"age": 20,-->
-<!--"sex": "man",-->
-<!--"symptom": "头痛,发热,汗出",-->
-<!--"prescription": "推荐的草药为：[['斑蟊|猫', '普通二分至三分。'], ['龙胆', '普通五分至钱半。'], ['铁精', '普通内服一厘至五厘，煎服者虽数钱亦可，近时多用以融化他药中服之。'], ['白头翁', '普通钱半至三钱。'], ['栀子', '普通一钱至三钱。'], ['白垩', '普通数分至一钱。'], ['云母', ' 一般内服数分起。'], ['天名精', '普通一二钱。'], ['龙骨', '普通二钱至三四钱。'], ['白瓜子', None], ['葶苈', '普通八分至二三钱。'], ['瓜蒂', '普通一钱至二钱。'], ['石灰', '普通三分至一钱。'], ['五加皮', '普通一钱至三钱。'], ['阳起石', '普通水飞用，五分至一钱。'], ['槐实', '普通一钱至三钱。']]"-->
-<!--}-->
-
 <script>
 import patient from '@/model/patient'
 
@@ -83,6 +74,10 @@ export default {
       aaa: '',
       group: [
         {
+          name: '',
+          age: '',
+          sex: '',
+          symptom: '',
           prescription: '',
         },
       ],
@@ -93,7 +88,7 @@ export default {
       try {
         this.loading = true
         this.sym = await patient.getSymptoms()
-        this.form.symptom = `${this.form.symptom + this.aaa }    `
+        this.form.symptom = `${this.form.symptom + this.aaa}    `
         this.loading = false
       } catch (e) {
         this.loading = false
