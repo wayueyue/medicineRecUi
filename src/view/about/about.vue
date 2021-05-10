@@ -36,21 +36,21 @@
     <div>
       <span>
         <a>开放报告：</a>
-        <div class="r-list" v-for="item in group" v-bind:key="item">
+        <div class="r-list" model="group">
           <div class="baogao"><a>病人开方报告</a></div>
           <div class="info">
-            <a>姓名：{{ item.name }}</a>
-            <a>年龄：{{ item.age }}</a>
-            <a>性别：{{ item.sex }}</a>
+            <a>姓名：{{ group.name }}</a>
+            <a>年龄：{{ group.age }}</a>
+            <a>性别：{{ group.sex }}</a>
           </div>
           <div class="state">
-            <a>病人症状：{{ item.symptom }}</a>
+            <a>病人症状：{{ group.symptom }}</a>
           </div>
           <div class="result">
             <a>处方推荐结果：</a>
           </div>
           <div class="res">
-            <a>{{ item.prescription }}</a>
+            <a>{{ group.prescription }}</a>
           </div>
         </div>
       </span>
@@ -69,6 +69,7 @@ export default {
         age: '',
         sex: '',
         symptom: '',
+        prescription: '',
       },
       sym: [],
       aaa: '',
@@ -88,7 +89,7 @@ export default {
       try {
         this.loading = true
         this.sym = await patient.getSymptoms()
-        this.form.symptom = `${this.form.symptom + this.aaa } `
+        this.form.symptom = `${this.form.symptom + this.aaa} `
         this.loading = false
       } catch (e) {
         this.loading = false
