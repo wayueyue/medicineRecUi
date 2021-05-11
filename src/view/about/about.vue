@@ -25,6 +25,7 @@
         <span><el-button @click="getSymptoms()">添加症状</el-button></span>
         <span><el-button @click="emptyList()">清空列表</el-button></span>
         <span><el-button type="primary" @click="submitform()" :loading="loading">自动开方</el-button></span>
+        <span><el-button @click="getInfos()">开放报告</el-button></span>
       </div>
       <div class="list">
         <span
@@ -36,7 +37,7 @@
     <div>
       <span>
         <a>开放报告：</a>
-        <div class="r-list" model="group">
+        <div class="r-list" model="group" status-icon ref="group" @submit.native.prevent>
           <div class="baogao"><a>病人开方报告</a></div>
           <div class="info">
             <a>姓名：{{ group.name }}</a>
@@ -69,19 +70,16 @@ export default {
         age: '',
         sex: '',
         symptom: '',
-        prescription: '',
       },
       sym: [],
       aaa: '',
-      group: [
-        {
-          name: '',
-          age: '',
-          sex: '',
-          symptom: '',
-          prescription: '',
-        },
-      ],
+      group: {
+        name: '',
+        age: '',
+        sex: '',
+        symptom: '',
+        prescription: '',
+      },
     }
   },
   methods: {
@@ -99,7 +97,7 @@ export default {
     async submitform() {
       try {
         this.loading = true
-        this.group = await patient.createPatient(this.form)
+        await patient.createPatient(this.form)
         this.loading = false
       } catch (e) {
         this.loading = false
@@ -108,6 +106,10 @@ export default {
     },
     async emptyList() {
       this.form.symptom = ''
+    },
+    async getInfos() {
+      const res = await patient.getPatient(this.form.name)
+      this.group = res
     },
   },
   async created() {
@@ -217,7 +219,8 @@ size {
   }
   .res {
     border-bottom: none;
-    word-break: break-all;
+    width: 100%;
+    line-height: 25px;
   }
 }
 
