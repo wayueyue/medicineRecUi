@@ -97,7 +97,8 @@ export default {
     async submitform() {
       try {
         this.loading = true
-        await patient.createPatient(this.form)
+        const res = await patient.createPatient(this.form)
+        this.group = res
         this.loading = false
       } catch (e) {
         this.loading = false
